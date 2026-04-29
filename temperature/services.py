@@ -25,6 +25,5 @@ async def fetch_one_temp(async_client: AsyncClient, city: City) -> dict:
 async def fetch_temperature_data(
     async_client: AsyncClient, cities_list: list[City]
 ) -> list[dict]:
-    result_data = []
     tasks = [fetch_one_temp(async_client, city) for city in cities_list]
     return await asyncio.gather(*tasks)
