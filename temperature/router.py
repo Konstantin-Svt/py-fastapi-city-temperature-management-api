@@ -13,15 +13,15 @@ from temperature import schemas, crud, services
 router = APIRouter(prefix="/temperatures", tags=["temperatures"])
 
 
-@router.get("/", response_model=list[schemas.Temperature])
+@router.get("", response_model=list[schemas.Temperature])
 async def read_temperatures(
     asession: Annotated[AsyncSession, Depends(get_session)],
     city_id: Annotated[int | None, Query()] = None,
 ) -> Any:
-    return await crud.aget_temperatures_list(asession, city_id)
+    return list(await crud.aget_temperatures_list(asession, city_id))
 
 
-@router.post("/update/")
+@router.post("/update")
 async def create_temperature_data(
     asession: Annotated[AsyncSession, Depends(get_session)],
     aclient: Annotated[AsyncClient, Depends(get_client)],

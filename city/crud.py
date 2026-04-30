@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, ScalarResult
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from city import models, schemas
 from db.exc import DatabaseError
@@ -47,9 +47,11 @@ async def aupdate_city(
         await asession.commit()
         await asession.refresh(updated_city)
         return updated_city
-    except IntegrityError as e:
+    except (IntegrityError, NoResultFound) as e:
         await asession.rollback()
-        raise DatabaseError(e.orig)
+        if hasattr(e, "orig"):
+            raise DatabaseError(e.orig)
+        raise DatabaseError
 
 
 async def adelete_city(

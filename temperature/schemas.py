@@ -16,7 +16,7 @@ class TemperatureCreate(BaseTemperature):
 
 class Temperature(BaseTemperature):
     id: int
-    city: str | City
+    city: str
 
     model_config = ConfigDict(from_attributes=True)
 
